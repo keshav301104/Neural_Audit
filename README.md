@@ -2,7 +2,8 @@
 
 **NeuralAudit** is an automated evaluation pipeline designed to audit RAG (Retrieval-Augmented Generation) chatbots. It assesses AI responses against "Ground Truth" context vectors to detect **Hallucinations**, measure **Relevance**, and calculate **Cost/Latency** metrics in real-time.
 
-![NeuralAudit Dashboard](static/dashboard.png)
+![NeuralAudit Dashboard](NeuralAudit_Dashboard.png)
+
 
 ## 📋 Project Overview
 
