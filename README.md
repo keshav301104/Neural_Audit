@@ -65,48 +65,45 @@ NeuralAudit/
     ├── ingestion.py         # JSON Parsing & Cleaning
     ├── metrics.py           # Cost & Latency Math
     └── judge.py             # LLM Evaluation Prompts
+```
 
-⚡ Scalability Strategy (Scaling to Millions)
-To scale NeuralAudit from this prototype to handling millions of daily conversations, the following architecture changes are proposed:
+## ⚡ Scalability Strategy (Scaling to Millions)
 
-Async Queueing: Replace direct API calls with a message queue (RabbitMQ or Kafka). Evaluation requests would be pushed to a queue and processed by a distributed fleet of worker nodes.
+To scale NeuralAudit to process millions of daily conversations, the following changes would be implemented:
 
-Semantic Caching (Redis): Before calling the LLM Judge, check a Redis Vector Cache. If a similar Query+Context has been evaluated before, return the cached score. This reduces API costs by ~40%.
+1.  **Async Queueing:** Replace the direct API call with a message queue (**RabbitMQ** or **Kafka**). Evaluation requests would be pushed to a queue and processed by a fleet of worker nodes.
+2.  **Semantic Caching (Redis):** Before calling the LLM Judge, we check a **Redis Vector Cache**. If a similar User Query + Context has been evaluated before, we return the cached score. This reduces API costs by ~40%.
+3.  **Tiered Evaluation:**
+    * **Tier 1 (Regex):** Instant fail for empty/nonsense responses.
+    * **Tier 2 (Small Model):** Use a local, fine-tuned **Llama-3-8B** for standard relevancy checks (Cost: Near Zero).
+    * **Tier 3 (Gemini/GPT-4):** Only used for complex reasoning or disputes.
 
-Tiered Evaluation:
+## 🛠️ Local Setup
 
-Tier 1 (Regex/Heuristics): Instant check for formatting errors (Cost: $0).
+1.  **Clone the repository**
+    ```bash
+    git clone [https://github.com/your-username/NeuralAudit.git](https://github.com/your-username/NeuralAudit.git)
+    cd NeuralAudit
+    ```
 
-Tier 2 (Small Model): Use a quantized local model (e.g., Llama-3-8B) for standard checks.
+2.  **Install dependencies**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Tier 3 (Gemini/GPT-4): Only used for complex reasoning or disputes.
+3.  **Set up API Key**
+    Create a `.env` file and add your Google Gemini Key:
+    ```text
+    GOOGLE_API_KEY=your_key_here
+    ```
 
-⚙️ Setup & Installation
-1. Clone the repository
+4.  **Run the Server**
+    ```bash
+    uvicorn api:app --reload
+    ```
 
-Bash
-
-git clone [https://github.com/your-username/NeuralAudit.git](https://github.com/your-username/NeuralAudit.git)
-cd NeuralAudit
-2. Install dependencies
-
-Bash
-
-pip install -r requirements.txt
-3. Set up Environment Variables Create a .env file in the root directory and add your Google Gemini API key:
-
-Plaintext
-
-GOOGLE_API_KEY=your_api_key_here
-▶️ How to Run
-Start the Server: Run the following command in your terminal:
-
-Bash
-
-uvicorn api:app --reload
-Access the Dashboard: Open your browser and navigate to: http://127.0.0.1:8000
-
-Run an Audit:
+5.  **Access Dashboard**
+    Open `http://127.0.0.1:8000` in your browser.
 
 Upload a Chat Log JSON.
 
