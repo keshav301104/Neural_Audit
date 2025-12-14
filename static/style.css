@@ -1,0 +1,218 @@
+:root {
+    --bg-dark: #09090b;
+    --card-bg: rgba(20, 20, 25, 0.7);
+    --primary: #00ff9d;
+    --secondary: #00b8ff;
+    --danger: #ff3366;
+    --text-main: #ffffff;
+    --text-dim: #888888;
+    --border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box; /* Prevents padding from causing overlap */
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-dark);
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden; /* Prevents double scrollbars */
+    background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000 100%);
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: 300px 1fr; /* Fixed Sidebar, Flexible Main */
+    height: 100vh;
+    width: 100vw;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+    background: rgba(10, 10, 12, 0.95);
+    border-right: var(--border);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    backdrop-filter: blur(10px);
+    overflow-y: auto; /* Adds scroll if screen is too short */
+    height: 100%;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* Prevents logo from squishing */
+}
+
+.highlight { color: var(--primary); }
+
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.file-drop {
+    border: 1px dashed #444;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    background: rgba(255,255,255,0.02);
+    user-select: none;
+}
+
+.file-drop:hover {
+    border-color: var(--primary);
+    background: rgba(0, 255, 157, 0.05);
+}
+
+.icon { font-size: 24px; display: block; margin-bottom: 5px; }
+
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: var(--primary);
+    color: #000;
+    border: none;
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 4px; /* Soften edges */
+    transition: 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px var(--primary);
+}
+
+.status-panel {
+    margin-top: auto; /* Pushes to bottom */
+    padding-top: 20px;
+    border-top: 1px solid #333;
+    font-size: 14px;
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: var(--text-dim);
+}
+
+.status-ok { color: var(--primary); }
+.status-warn { color: #ffcc00; }
+
+/* --- DASHBOARD --- */
+.dashboard {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    overflow-y: auto; /* Scrollable dashboard */
+    height: 100%;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+}
+
+/* METRICS GRID - Responsive Fix */
+.metrics-grid {
+    display: grid;
+    /* Wraps cards if screen is narrow, min width 200px */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    border: var(--border);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-title {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.metric-value {
+    font-size: 36px; /* Slightly smaller to prevent overlap */
+    font-weight: 700;
+    margin-top: 5px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    white-space: nowrap; /* Prevents text wrap */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#valRel { color: var(--primary); }
+#valFaith { color: var(--secondary); }
+
+/* VISUALIZATION GRID */
+.vis-grid {
+    display: grid;
+    /* Stacks vertically on small screens, side-by-side on large */
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    flex-grow: 1; /* Takes remaining height */
+    min-height: 400px;
+}
+
+.chart-container, .log-container {
+    height: 100%;
+    min-height: 350px;
+}
+
+.terminal-window {
+    background: #050505;
+    height: 100%;
+    max-height: 300px;
+    padding: 15px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--primary);
+    overflow-y: auto;
+    border: 1px solid #333;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.log-line { 
+    margin-bottom: 8px; 
+    border-bottom: 1px solid #111; 
+    padding-bottom: 4px; 
+    word-wrap: break-word; /* Prevents long text overflow */
+}
+.log-fail { color: var(--danger); }
+
+/* SCROLLBAR STYLING */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
